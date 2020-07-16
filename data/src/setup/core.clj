@@ -46,17 +46,17 @@
 
 (defn write-to-redis [campaigns ads redis-host]
   ;; Hook up the redis DB
-  (println "Writing initial data to Redis.")
+  (println "Writing ad-to-campaign-ids map.")
   (with-open [ad-to-campaign-o (clojure.java.io/writer "ad-to-campaign-ids.txt")]
     (binding [*out* ad-to-campaign-o]
       (let [campaigns-ads (map vector campaigns (partition 10 ads))]
-        (redis/with-server {:host redis-host}
-          (redis/flushall)
-          (doseq [[campaign campaign-ads] campaigns-ads]
-            (redis/sadd "campaigns" campaign)
-            (doseq [ad campaign-ads]
-              (println (str "{ \""ad "\": \"" campaign "\"}"))
-              (redis/set ad campaign))))))))
+;        (redis/with-server {:host redis-host}
+;          (redis/flushall)
+        (doseq [[campaign campaign-ads] campaigns-ads]
+;            (redis/sadd "campaigns" campaign)
+          (doseq [ad campaign-ads]
+            (println (str "{ \""ad "\": \"" campaign "\"}"))))))))
+;            (redis/set ad campaign)))))))
 
 (defn write-to-kafka [ads kafka-hosts]
   ;; Put some crap in Kafka
@@ -182,7 +182,8 @@
 
 (defn run [throughput with-skew? kafka-hosts redis-host]
   (println "Running, emitting" throughput "tuples per second.")
-  (let [ads (gen-ads redis-host)
+  (let [ ;ads (gen-ads redis-host)
+        {campaigns :campaigns ads :ads} (load-ids)
         page-ids (make-ids 100)
         user-ids (make-ids 100)
         start-time-ns (* 1000000 (System/currentTimeMillis))
@@ -242,7 +243,7 @@
       (let [campaigns (make-ids num-campaigns)
             ads (into [] (make-ids (* num-campaigns 10)))]
         (write-to-redis campaigns ads (conf :redis-host))
-        (write-to-kafka ads (conf :kakfa-brokers))
+;        (write-to-kafka ads (conf :kakfa-brokers))
         (write-ids campaigns ads))
       (write-to-redis campaigns ads))))
 

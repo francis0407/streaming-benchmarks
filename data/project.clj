@@ -1,6 +1,8 @@
 ;; Copyright 2015, Yahoo Inc.
 ;; Licensed under the terms of the Apache License 2.0. Please see LICENSE file in the project root for terms.
-
+(require 'cemerick.pomegranate.aether)
+(cemerick.pomegranate.aether/register-wagon-factory!
+ "http" #(org.apache.maven.wagon.providers.http.HttpWagon.))
 (defproject setup "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/tools.cli "0.3.3"]

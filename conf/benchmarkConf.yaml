@@ -1,6 +1,8 @@
 # Copyright 2015, Yahoo Inc.
 # Licensed under the terms of the Apache License 2.0. Please see LICENSE file in the project root for terms.
 
+ad_to_campaign_path: "/home/francis/Desktop/EventProducer/ad-camp-map.txt"
+
 kafka.brokers:
     - "localhost"
 
@@ -10,7 +12,7 @@ zookeeper.servers:
 kafka.port: 9092
 zookeeper.port: 2181
 redis.host: "localhost"
-kafka.topic: "ad-events"
+kafka.topic: "test1"
 kafka.partitions: 1
 
 process.hosts: 1
@@ -22,3 +24,5 @@ storm.ackers: 2
 
 #Spark Specific
 spark.batchtime: 2000
+
+redis.hashtable: "t1"

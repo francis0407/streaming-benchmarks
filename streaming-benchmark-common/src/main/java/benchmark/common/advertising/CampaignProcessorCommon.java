@@ -28,8 +28,8 @@ public class CampaignProcessorCommon {
     private static final Long time_divisor = 10000L; // 10 second windows
 
     public CampaignProcessorCommon(String redisServerHostname) {
-        jedis = new Jedis(redisServerHostname);
-        flush_jedis = new Jedis(redisServerHostname);
+//        jedis = new Jedis(redisServerHostname);
+//        flush_jedis = new Jedis(redisServerHostname);
     }
 
     public void prepare() {
@@ -67,25 +67,25 @@ public class CampaignProcessorCommon {
     }
 
     private void writeWindow(String campaign, Window win) {
-        String windowUUID = flush_jedis.hmget(campaign, win.timestamp).get(0);
-        if (windowUUID == null) {
-            windowUUID = UUID.randomUUID().toString();
-            flush_jedis.hset(campaign, win.timestamp, windowUUID);
-
-            String windowListUUID = flush_jedis.hmget(campaign, "windows").get(0);
-            if (windowListUUID == null) {
-                windowListUUID = UUID.randomUUID().toString();
-                flush_jedis.hset(campaign, "windows", windowListUUID);
-            }
-            flush_jedis.lpush(windowListUUID, win.timestamp);
-        }
-
-        synchronized (campaign_windows) {
-            flush_jedis.hincrBy(windowUUID, "seen_count", win.seenCount);
-            win.seenCount = 0L;
-        }
-        flush_jedis.hset(windowUUID, "time_updated", Long.toString(System.currentTimeMillis()));
-        flush_jedis.lpush("time_updated", Long.toString(System.currentTimeMillis()));
+//        String windowUUID = flush_jedis.hmget(campaign, win.timestamp).get(0);
+//        if (windowUUID == null) {
+//            windowUUID = UUID.randomUUID().toString();
+//            flush_jedis.hset(campaign, win.timestamp, windowUUID);
+//
+//            String windowListUUID = flush_jedis.hmget(campaign, "windows").get(0);
+//            if (windowListUUID == null) {
+//                windowListUUID = UUID.randomUUID().toString();
+//                flush_jedis.hset(campaign, "windows", windowListUUID);
+//            }
+//            flush_jedis.lpush(windowListUUID, win.timestamp);
+//        }
+//
+//        synchronized (campaign_windows) {
+//            flush_jedis.hincrBy(windowUUID, "seen_count", win.seenCount);
+//            win.seenCount = 0L;
+//        }
+//        flush_jedis.hset(windowUUID, "time_updated", Long.toString(System.currentTimeMillis()));
+//        flush_jedis.lpush("time_updated", Long.toString(System.currentTimeMillis()));
     }
 
     public void flushWindows() {
