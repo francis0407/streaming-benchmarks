@@ -3,6 +3,8 @@
 
 ad_to_campaign_path: "/home/francis/Desktop/EventProducer/ad-camp-map.txt"
 
+events_path: "/home/francis/Desktop/EventProducer/events.tbl"
+
 kafka.brokers:
     - "localhost"
 
@@ -25,4 +27,13 @@ storm.ackers: 2
 #Spark Specific
 spark.batchtime: 2000
 
+events.num: 10000000
+
 redis.hashtable: "t1"
+
+window.size: 5000
+
+shared_file: "/"
+
+map.partitions: 3
+reduce.partitions: 1
